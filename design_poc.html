@@ -1,0 +1,397 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.shell{font-family:var(--font-sans);display:grid;grid-template-columns:320px 1fr;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden;background:var(--color-background-primary)}
+.left{background:var(--color-background-secondary);border-right:0.5px solid var(--color-border-tertiary);display:flex;flex-direction:column}
+.left-head{padding:16px 18px 14px;border-bottom:0.5px solid var(--color-border-tertiary)}
+.left-head h2{font-size:14px;font-weight:500;color:var(--color-text-primary)}
+.left-head p{font-size:12px;color:var(--color-text-tertiary);margin-top:2px}
+.form-body{padding:14px 18px;display:flex;flex-direction:column;gap:10px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.fg{display:flex;flex-direction:column;gap:4px}
+.fg label{font-size:12px;color:var(--color-text-secondary)}
+.fg input,.fg select{font-size:13px;padding:7px 10px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);background:var(--color-background-primary);color:var(--color-text-primary);width:100%}
+.fg input:focus,.fg select:focus{outline:none;border-color:var(--color-border-primary)}
+.cat-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.cat-btn{padding:8px 6px;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);background:var(--color-background-primary);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;transition:border-color 0.15s,background 0.15s}
+.cat-btn:hover{border-color:var(--color-border-secondary);background:var(--color-background-secondary)}
+.cat-btn.active{border-width:1.5px}
+.cat-btn.active.e{border-color:#185FA5;background:#E6F1FB}
+.cat-btn.active.p{border-color:#0F6E56;background:#E1F5EE}
+.cat-btn.active.d{border-color:#993556;background:#FBEAF0}
+.cat-btn.active.b{border-color:#854F0B;background:#FAEEDA}
+.cat-icon{width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center}
+.cat-icon svg{width:16px;height:16px}
+.cat-btn span{font-size:11px;font-weight:500;color:var(--color-text-secondary)}
+.qty-row{display:flex;align-items:center;gap:8px}
+.qty-btn{width:30px;height:30px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);background:var(--color-background-primary);cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;color:var(--color-text-primary);flex-shrink:0}
+.qty-btn:hover{background:var(--color-background-secondary)}
+.qty-val{font-size:18px;font-weight:500;color:var(--color-text-primary);min-width:28px;text-align:center}
+.qty-label{font-size:12px;color:var(--color-text-tertiary)}
+.add-btn{background:var(--color-text-primary);color:var(--color-background-primary);border:none;border-radius:var(--border-radius-md);padding:10px;font-size:13px;font-weight:500;cursor:pointer;width:100%;margin-top:4px}
+.add-btn:hover{opacity:0.85}
+.add-btn:disabled{opacity:0.35;cursor:not-allowed}
+.err{font-size:11px;color:#A32D2D;display:none;margin-top:-4px}
+.plist-head{padding:10px 18px 6px;border-top:0.5px solid var(--color-border-tertiary);border-bottom:0.5px solid var(--color-border-tertiary);display:flex;justify-content:space-between;align-items:center}
+.plist-head span{font-size:12px;color:var(--color-text-secondary)}
+.plist-head button{font-size:11px;color:var(--color-text-tertiary);background:none;border:none;cursor:pointer;padding:0}
+.plist-head button:hover{color:var(--color-text-danger,#A32D2D)}
+.plist{flex:1;overflow-y:auto;padding:8px 18px 14px;display:flex;flex-direction:column;gap:5px;max-height:220px}
+.prow{display:flex;justify-content:space-between;align-items:center;padding:7px 10px;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);background:var(--color-background-primary);animation:fadeIn 0.2s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
+.prow-left{display:flex;align-items:center;gap:8px}
+.avatar{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;flex-shrink:0}
+.prow-name{font-size:13px;font-weight:500;color:var(--color-text-primary)}
+.prow-cat{font-size:11px;color:var(--color-text-secondary)}
+.prow-qty{font-size:12px;color:var(--color-text-tertiary)}
+.del-btn{background:none;border:none;cursor:pointer;color:var(--color-text-tertiary);padding:2px 4px;border-radius:4px;font-size:14px;line-height:1}
+.del-btn:hover{color:#A32D2D;background:#FCEBEB}
+.empty-p{font-size:12px;color:var(--color-text-tertiary);text-align:center;padding:20px 0}
+.right{padding:18px;display:flex;flex-direction:column;gap:18px;overflow-y:auto}
+.section-label{font-size:11px;font-weight:500;color:var(--color-text-tertiary);letter-spacing:0.07em;text-transform:uppercase;margin-bottom:8px}
+.status-bar{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-tertiary)}
+.status-bar.ok{background:#EAF3DE;border-color:#97C459}
+.status-bar.nok{background:#FCEBEB;border-color:#F09595}
+.status-bar.warn{background:#FAEEDA;border-color:#EF9F27}
+.status-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.status-bar.ok .status-dot{background:#639922}
+.status-bar.nok .status-dot{background:#E24B4A}
+.status-bar.warn .status-dot{background:#BA7517}
+.status-text{font-size:13px;font-weight:500}
+.status-bar.ok .status-text{color:#3B6D11}
+.status-bar.nok .status-text{color:#A32D2D}
+.status-bar.warn .status-text{color:#854F0B}
+.metrics4{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.mcard{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:10px 12px;position:relative;overflow:hidden}
+.mcard-label{font-size:11px;color:var(--color-text-secondary);margin-bottom:4px}
+.mcard-val{font-size:22px;font-weight:500}
+.mcard-sub{font-size:11px;color:var(--color-text-tertiary);margin-top:1px}
+.mcard-bar{position:absolute;bottom:0;left:0;height:3px;transition:width 0.4s ease,background 0.3s}
+.jauges{display:flex;flex-direction:column;gap:10px}
+.jauge-row{display:flex;flex-direction:column;gap:4px}
+.jhead{display:flex;justify-content:space-between;align-items:center}
+.jname{font-size:13px;font-weight:500;color:var(--color-text-primary);display:flex;align-items:center;gap:6px}
+.jright{display:flex;align-items:center;gap:8px}
+.jpct{font-size:11px;color:var(--color-text-tertiary)}
+.jbadge{font-size:10px;font-weight:500;padding:2px 7px;border-radius:99px}
+.jbadge.ok{background:#EAF3DE;color:#3B6D11}
+.jbadge.warn{background:#FAEEDA;color:#854F0B}
+.jbadge.nok{background:#FCEBEB;color:#A32D2D}
+.jtrack{height:8px;background:var(--color-border-tertiary);border-radius:99px;overflow:hidden}
+.jfill{height:100%;border-radius:99px;transition:width 0.45s cubic-bezier(0.4,0,0.2,1),background 0.3s}
+.chart-wrap{position:relative;height:160px}
+.conseil-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.conseil-card{padding:10px 12px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-tertiary);background:var(--color-background-primary)}
+.conseil-head{font-size:12px;font-weight:500;color:var(--color-text-secondary);margin-bottom:2px}
+.conseil-body{font-size:13px;color:var(--color-text-primary)}
+.conseil-card.needs{background:#FCEBEB;border-color:#F09595}
+.conseil-card.needs .conseil-head{color:#A32D2D}
+.conseil-card.needs .conseil-body{color:#791F1F}
+.conseil-card.full{background:#EAF3DE;border-color:#97C459}
+.conseil-card.full .conseil-head{color:#3B6D11}
+.conseil-card.full .conseil-body{color:#27500A}
+</style>
+
+<div class="shell">
+
+<div class="left">
+  <div class="left-head">
+    <h2>Ajouter un participant</h2>
+    <p>Remplis les champs puis valide</p>
+  </div>
+  <div class="form-body">
+    <div class="row2">
+      <div class="fg"><label>Prénom</label><input id="ip-pre" type="text" placeholder="Marie" /></div>
+      <div class="fg"><label>Nom</label><input id="ip-nom" type="text" placeholder="Dupont" /></div>
+    </div>
+
+    <div class="fg">
+      <label>Catégorie</label>
+      <div class="cat-grid">
+        <button class="cat-btn e" data-cat="entree" onclick="selectCat(this)">
+          <div class="cat-icon" style="background:#E6F1FB">
+            <svg viewBox="0 0 16 16" fill="none"><circle cx="8" cy="5" r="3" stroke="#185FA5" stroke-width="1.2"/><path d="M3 13c0-2.76 2.24-5 5-5s5 2.24 5 5" stroke="#185FA5" stroke-width="1.2" stroke-linecap="round"/></svg>
+          </div>
+          <span>Entrée</span>
+        </button>
+        <button class="cat-btn p" data-cat="plat" onclick="selectCat(this)">
+          <div class="cat-icon" style="background:#E1F5EE">
+            <svg viewBox="0 0 16 16" fill="none"><rect x="2" y="9" width="12" height="2" rx="1" stroke="#0F6E56" stroke-width="1.2"/><path d="M4 9V6a4 4 0 018 0v3" stroke="#0F6E56" stroke-width="1.2"/></svg>
+          </div>
+          <span>Plat</span>
+        </button>
+        <button class="cat-btn d" data-cat="dessert" onclick="selectCat(this)">
+          <div class="cat-icon" style="background:#FBEAF0">
+            <svg viewBox="0 0 16 16" fill="none"><path d="M4 12V8a4 4 0 018 0v4" stroke="#993556" stroke-width="1.2"/><path d="M2 12h12" stroke="#993556" stroke-width="1.2" stroke-linecap="round"/><circle cx="8" cy="5" r="1.5" fill="#993556"/></svg>
+          </div>
+          <span>Dessert</span>
+        </button>
+        <button class="cat-btn b" data-cat="boisson" onclick="selectCat(this)">
+          <div class="cat-icon" style="background:#FAEEDA">
+            <svg viewBox="0 0 16 16" fill="none"><path d="M5 2h6l-1 8H6L5 2z" stroke="#854F0B" stroke-width="1.2"/><path d="M4 13h8" stroke="#854F0B" stroke-width="1.2" stroke-linecap="round"/><path d="M11 5h2l-1 3h-1" stroke="#854F0B" stroke-width="1.2"/></svg>
+          </div>
+          <span>Boisson</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="fg">
+      <label>Quantité</label>
+      <div class="qty-row">
+        <button class="qty-btn" onclick="changeQty(-1)">−</button>
+        <span class="qty-val" id="qty-disp">1</span>
+        <button class="qty-btn" onclick="changeQty(1)">+</button>
+        <span class="qty-label">portion(s)</span>
+      </div>
+    </div>
+
+    <span class="err" id="err">Tous les champs sont requis.</span>
+    <button class="add-btn" id="add-btn" onclick="ajouter()">Valider l'ajout</button>
+  </div>
+
+  <div class="plist-head">
+    <span id="pcount">0 participant</span>
+    <button onclick="viderListe()">Tout effacer</button>
+  </div>
+  <div class="plist" id="plist">
+    <div class="empty-p" id="empty-p">Aucun participant pour l'instant.</div>
+  </div>
+</div>
+
+<div class="right">
+
+  <div>
+    <div class="section-label">Viabilité du repas</div>
+    <div class="status-bar nok" id="status-bar">
+      <div class="status-dot"></div>
+      <span class="status-text" id="status-txt">En attente de participants</span>
+    </div>
+  </div>
+
+  <div>
+    <div class="section-label">Totaux par catégorie</div>
+    <div class="metrics4">
+      <div class="mcard">
+        <div class="mcard-label">Entrées</div>
+        <div class="mcard-val" id="mv-e">0</div>
+        <div class="mcard-sub">min. 5 requis</div>
+        <div class="mcard-bar" id="mb-e" style="width:0%;background:#B5D4F4"></div>
+      </div>
+      <div class="mcard">
+        <div class="mcard-label">Plats</div>
+        <div class="mcard-val" id="mv-p">0</div>
+        <div class="mcard-sub">min. 8 requis</div>
+        <div class="mcard-bar" id="mb-p" style="width:0%;background:#9FE1CB"></div>
+      </div>
+      <div class="mcard">
+        <div class="mcard-label">Desserts</div>
+        <div class="mcard-val" id="mv-d">0</div>
+        <div class="mcard-sub">min. 5 requis</div>
+        <div class="mcard-bar" id="mb-d" style="width:0%;background:#F4C0D1"></div>
+      </div>
+      <div class="mcard">
+        <div class="mcard-label">Boissons</div>
+        <div class="mcard-val" id="mv-b">0</div>
+        <div class="mcard-sub">min. 6 requis</div>
+        <div class="mcard-bar" id="mb-b" style="width:0%;background:#FAC775"></div>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <div class="section-label">Jauges de besoin</div>
+    <div class="jauges" id="jauges"></div>
+  </div>
+
+  <div>
+    <div class="section-label">Répartition actuelle</div>
+    <div style="display:flex;gap:12px;margin-bottom:8px;flex-wrap:wrap" id="legend"></div>
+    <div class="chart-wrap"><canvas id="repChart"></canvas></div>
+  </div>
+
+  <div>
+    <div class="section-label">Conseils pour l'organisateur</div>
+    <div class="conseil-grid" id="conseils"></div>
+  </div>
+
+</div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+const MINS = {entree:5,plat:8,dessert:5,boisson:6};
+const LABELS = {entree:'Entrée',plat:'Plat',dessert:'Dessert',boisson:'Boisson'};
+const CAT_KEY = ['entree','plat','dessert','boisson'];
+const BAR_COLORS = {entree:'#85B7EB',plat:'#5DCAA5',dessert:'#ED93B1',boisson:'#EF9F27'};
+const BAR_OK = {entree:'#378ADD',plat:'#1D9E75',dessert:'#D4537E',boisson:'#BA7517'};
+const AVATARS = {entree:{bg:'#E6F1FB',col:'#0C447C'},plat:{bg:'#E1F5EE',col:'#085041'},dessert:{bg:'#FBEAF0',col:'#72243E'},boisson:{bg:'#FAEEDA',col:'#633806'}};
+
+let participants = [];
+let totaux = {entree:0,plat:0,dessert:0,boisson:0};
+let selectedCat = null;
+let qty = 1;
+let chart;
+
+function selectCat(el){
+  document.querySelectorAll('.cat-btn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  selectedCat = el.dataset.cat;
+}
+
+function changeQty(d){
+  qty = Math.max(1, Math.min(20, qty+d));
+  document.getElementById('qty-disp').textContent = qty;
+}
+
+function ajouter(){
+  const pre = document.getElementById('ip-pre').value.trim();
+  const nom = document.getElementById('ip-nom').value.trim();
+  const err = document.getElementById('err');
+  if(!pre || !nom || !selectedCat){ err.style.display='block'; return; }
+  err.style.display = 'none';
+  participants.push({pre,nom,cat:selectedCat,qty});
+  totaux[selectedCat] += qty;
+  document.getElementById('ip-pre').value='';
+  document.getElementById('ip-nom').value='';
+  document.querySelectorAll('.cat-btn').forEach(b=>b.classList.remove('active'));
+  selectedCat=null; qty=1;
+  document.getElementById('qty-disp').textContent='1';
+  refresh();
+}
+
+function supprimer(i){
+  const p = participants[i];
+  totaux[p.cat] -= p.qty;
+  participants.splice(i,1);
+  refresh();
+}
+
+function viderListe(){
+  participants=[];
+  CAT_KEY.forEach(k=>totaux[k]=0);
+  refresh();
+}
+
+function refresh(){
+  renderList();
+  renderMetrics();
+  renderJauges();
+  renderStatus();
+  renderChart();
+  renderConseils();
+}
+
+function renderList(){
+  const el = document.getElementById('plist');
+  const ep = document.getElementById('empty-p');
+  const pc = document.getElementById('pcount');
+  pc.textContent = participants.length + (participants.length>1?' participants':' participant');
+  if(participants.length===0){ ep.style.display='block'; el.innerHTML=''; el.appendChild(ep); return; }
+  ep.style.display='none';
+  el.innerHTML = participants.slice().reverse().map((p,ri)=>{
+    const i = participants.length-1-ri;
+    const av = AVATARS[p.cat];
+    const init = (p.pre[0]+p.nom[0]).toUpperCase();
+    return `<div class="prow">
+      <div class="prow-left">
+        <div class="avatar" style="background:${av.bg};color:${av.col}">${init}</div>
+        <div><div class="prow-name">${p.pre} ${p.nom}</div><div class="prow-cat">${LABELS[p.cat]}</div></div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <span class="prow-qty">${p.qty} port.</span>
+        <button class="del-btn" onclick="supprimer(${i})">✕</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderMetrics(){
+  const ids = {entree:'e',plat:'p',dessert:'d',boisson:'b'};
+  const barFills = {entree:'#85B7EB',plat:'#5DCAA5',dessert:'#ED93B1',boisson:'#EF9F27'};
+  const barOk = {entree:'#378ADD',plat:'#1D9E75',dessert:'#D4537E',boisson:'#BA7517'};
+  CAT_KEY.forEach(k=>{
+    const id = ids[k];
+    const val = totaux[k], min = MINS[k];
+    document.getElementById('mv-'+id).textContent = val;
+    const pct = Math.min(100, Math.round(val/min*100));
+    const bar = document.getElementById('mb-'+id);
+    bar.style.width = pct+'%';
+    bar.style.background = val>=min ? barOk[k] : barFills[k];
+  });
+}
+
+function renderJauges(){
+  const el = document.getElementById('jauges');
+  el.innerHTML = CAT_KEY.map(k=>{
+    const val=totaux[k], min=MINS[k];
+    const pct=Math.min(100,Math.round(val/min*100));
+    const cls = val>=min?'ok':val>=min*0.5?'warn':'nok';
+    const fillColor = val>=min ? BAR_OK[k] : (val>=min*0.5 ? '#EF9F27' : '#E24B4A');
+    const badge = val>=min ? 'Complet' : `−${min-val}`;
+    return `<div class="jauge-row">
+      <div class="jhead">
+        <span class="jname"><span style="width:8px;height:8px;border-radius:50%;background:${BAR_OK[k]};display:inline-block"></span>${LABELS[k]}</span>
+        <div class="jright"><span class="jpct">${val}/${min}</span><span class="jbadge ${cls}">${badge}</span></div>
+      </div>
+      <div class="jtrack"><div class="jfill" style="width:${pct}%;background:${fillColor}"></div></div>
+    </div>`;
+  }).join('');
+}
+
+function renderStatus(){
+  const bar = document.getElementById('status-bar');
+  const txt = document.getElementById('status-txt');
+  const manques = CAT_KEY.filter(k=>totaux[k]<MINS[k]);
+  const total = CAT_KEY.reduce((s,k)=>s+totaux[k],0);
+  if(total===0){ bar.className='status-bar nok'; txt.textContent='En attente de participants'; return; }
+  if(manques.length===0){ bar.className='status-bar ok'; txt.textContent='Repas viable — toutes les catégories sont couvertes !'; return; }
+  bar.className='status-bar warn';
+  txt.textContent=`Il manque : ${manques.map(k=>LABELS[k].toLowerCase()).join(', ')}`;
+}
+
+function renderChart(){
+  const data = CAT_KEY.map(k=>totaux[k]);
+  const mins = CAT_KEY.map(k=>MINS[k]);
+  const leg = document.getElementById('legend');
+  leg.innerHTML = CAT_KEY.map((k,i)=>`<span style="display:flex;align-items:center;gap:4px;font-size:12px;color:var(--color-text-secondary)"><span style="width:10px;height:10px;border-radius:2px;background:${BAR_OK[k]}"></span>${LABELS[k]} (${data[i]})</span>`).join('');
+  if(chart) chart.destroy();
+  chart = new Chart(document.getElementById('repChart'),{
+    type:'bar',
+    data:{
+      labels:['Entrées','Plats','Desserts','Boissons'],
+      datasets:[
+        {label:'Apporté',data:data,backgroundColor:CAT_KEY.map(k=>BAR_OK[k]+'CC'),borderRadius:4,borderSkipped:false},
+        {label:'Minimum',data:mins,type:'line',borderColor:'#888780',borderWidth:1.5,borderDash:[4,3],pointRadius:4,pointBackgroundColor:'#888780',fill:false,tension:0}
+      ]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>` ${c.dataset.label}: ${c.raw} portions`}}},
+      scales:{
+        y:{beginAtZero:true,grid:{color:'rgba(128,128,128,0.08)'},ticks:{stepSize:2}},
+        x:{grid:{display:false}}
+      }
+    }
+  });
+}
+
+function renderConseils(){
+  const el = document.getElementById('conseils');
+  const manques = CAT_KEY.filter(k=>totaux[k]<MINS[k]);
+  const surplus = CAT_KEY.filter(k=>totaux[k]>=MINS[k]);
+  if(participants.length===0){ el.innerHTML='<div class="conseil-card" style="grid-column:1/-1"><div class="conseil-head">En attente</div><div class="conseil-body">Commence à saisir des participants pour voir les conseils.</div></div>'; return; }
+  let cards = '';
+  if(manques.length>0){
+    cards += manques.map(k=>{
+      const diff = MINS[k]-totaux[k];
+      return `<div class="conseil-card needs"><div class="conseil-head">Chercher pour ${LABELS[k].toLowerCase()}</div><div class="conseil-body">Il manque encore ${diff} portion(s). Oriente les prochains inscrits vers cette catégorie.</div></div>`;
+    }).join('');
+  }
+  if(surplus.length>0){
+    cards += `<div class="conseil-card full" style="grid-column:${manques.length===0?'1/-1':'auto'}"><div class="conseil-head">Catégories couvertes</div><div class="conseil-body">${surplus.map(k=>LABELS[k]).join(', ')} — plus besoin de relancer.</div></div>`;
+  }
+  el.innerHTML = cards;
+}
+
+refresh();
+</script>
