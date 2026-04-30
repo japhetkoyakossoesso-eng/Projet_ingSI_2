@@ -60,7 +60,7 @@ class ApplicationAccueil:
     def charger_image(self):
         try:
            
-            chemin_image = r"C:\Users\HP\Documents\L2  informatique\S4\ing_sys_int\projet2\Projet_ingSI_2\partie_aceuil_tableaubord\img.jpg"
+            chemin_image = r"../assets/images/image_hero.png"
             image = Image.open(chemin_image)
             image = image.resize((900, 540))
             self.image_fond = ImageTk.PhotoImage(image)
