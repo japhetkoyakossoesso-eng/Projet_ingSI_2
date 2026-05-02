@@ -1,16 +1,16 @@
 # Projet_ingSI_2
 
-Base de projet Tkinter pour organiser un repas de promotion. Le squelette inclut une application exécutable, une séparation simple entre interface, logique métier et stockage JSON local, ainsi qu'un premier jeu de tests.
+Application Tkinter pour organiser un repas de promotion. Le projet inclut une interface complète, une séparation entre interface, contrôleur, logique métier et persistance SQLite locale.
 
 ## Structure
 
 - `src/main.py` : point d'entrée principal
-- `src/repaspromo/` : package applicatif
-- `src/repaspromo/controllers/` : orchestration Tkinter
-- `src/repaspromo/core/` : modèles, validation, persistance, services
-- `src/repaspromo/ui/` : thème, vues et widgets
-- `data/` : données locales JSON
-- `tests/` : tests unitaires de base
+- `src/controllers/` : orchestration Tkinter et navigation
+- `src/core/` : modèles, validation, repository SQLite et services métier
+- `src/ui/` : thème, vues et widgets réutilisables
+- `assets/` : images et icônes
+- `data/repaspromo.sqlite3` : base SQLite créée automatiquement au lancement
+- `tests/` : tests unitaires de la logique métier
 - `assets/` : images et icônes
 
 ## Lancer l'application
@@ -19,8 +19,22 @@ Base de projet Tkinter pour organiser un repas de promotion. Le squelette inclut
 PYTHONPATH=src python3 src/main.py
 ```
 
+ou :
+
+```bash
+PYTHONPATH=src python3 scripts/run.py
+```
+
 ## Lancer les tests
 
 ```bash
 PYTHONPATH=src python3 -m unittest discover -s tests
 ```
+
+## Fonctionnalités
+
+- Créer plusieurs repas avec objectifs par catégorie.
+- Ajouter et supprimer des participants.
+- Suivre les portions apportées pour les entrées, plats, desserts et boissons.
+- Visualiser la viabilité du repas et les catégories manquantes.
+- Consulter un tableau de bord avec jauges, conseils et détail des participants.
