@@ -208,3 +208,9 @@ __marimo__/
 
 .idea
 .codex
+.DS_Store
+
+# Donnees locales generees par l'application
+data/*.sqlite
+data/*.sqlite3
+data/*.sqlite3-*

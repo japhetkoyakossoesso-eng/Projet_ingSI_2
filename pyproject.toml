@@ -5,12 +5,10 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "repaspromo"
 version = "0.1.0"
-description = "Base de projet Tkinter pour un repas de promotion"
+description = "Application Tkinter simple pour organiser un repas de promotion"
 readme = "README.md"
 requires-python = ">=3.11"
-dependencies = [
-    "pillow>=12.2.0",
-]
+dependencies = []
 
 [tool.setuptools]
 package-dir = {"" = "src"}
