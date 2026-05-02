@@ -3,8 +3,8 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from repaspromo.core.repository import ContributionRepository
-from repaspromo.core.services import ContributionService
+from core import ContributionRepository
+from core import ContributionService
 
 
 class ContributionServiceTestCase(unittest.TestCase):
