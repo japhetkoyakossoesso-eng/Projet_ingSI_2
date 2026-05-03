@@ -65,4 +65,6 @@ data/repaspromo.sqlite3
 
 Tkinter est inclus avec la plupart des installations Python. Sur Linux, si la fenêtre ne s'ouvre pas, installer le paquet Tk de votre distribution, par exemple `python3-tk`.
 
-Merci pour votre compréhension, ce projet a été le fruit de travail de 3 étudiants.
+Ce projet a été le fruit du travail de 3 étudiants.
+
+Merci de bien prendre votre temps et lire le readme

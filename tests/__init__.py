@@ -1,1 +1,1 @@
-"""Tests du projet."""
+"""Tests du projet"""
