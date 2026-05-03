@@ -24,10 +24,10 @@ class ContributionServiceTestCase(unittest.TestCase):
         self.meal = self.service.create_meal(
             "Repas test",
             {
-                "Entrée": 1,
+                "Entrée": 2,
                 "Plat": 7,
-                "Dessert": 3,
-                "Boisson": 2,
+                "Dessert": 4,
+                "Boisson": 6,
             },
         )
 
